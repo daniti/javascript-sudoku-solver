@@ -91,23 +91,33 @@ function timesInArray(ar, n) {
     return tot;
 }
 
-// Return missing numbers for a specific index of the array (first converts to coordinates)
+// Return possible numbers for a specific index of the array
 function availableInIndex(ar, index) {
-    var i_coords = coords(index);
-    var availableInRow = available(row(ar, i_coords.y));
-    var availableInColumn = available(col(ar, i_coords.x));
-    var availableInBox = available(box(ar, whichBox(i_coords)));
-    var merge_available = availableInRow.concat(availableInColumn).concat(availableInBox);
+    return availableInCoords(ar, coords(index));
+}
+
+// Return possible numbers for specific coordinates
+function availableInCoords(ar, crd) {
+    var merge_available = available(row(ar, crd.y))
+        .concat(available(col(ar, crd.x)))
+        .concat(available(box(ar, whichBox(crd))));
+
     var all_available_dups = merge_available.filter((item) => {
-        return timesInArray(merge_available, item) == 3;
+        return timesInArray(merge_available, item) == 3; // Needs to be available for the row, column and box
     });
-    var all_available = [];
-    all_available_dups.forEach((item) => {
-        if (all_available.indexOf(item) == -1) {
-            all_available.push(item);
+    
+    return removeDuplicates(all_available_dups)
+}
+
+// Util function to remove duplicates
+function removeDuplicates(ar) {
+    var clean = [];
+    ar.forEach((item) => {
+        if (clean.indexOf(item) == -1) {
+            clean.push(item);
         }
     });
-    return all_available;
+    return clean;
 }
 
 // Convert an index of the array into coordinates
