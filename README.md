@@ -1,5 +1,5 @@
 # Javascript Sudoko Solver
-Pass a JSON to the `solve` function.
+Pass an array to the `solve` function to get the solution.
 ```javascript
 var schema = require('./schema.json');
 var solver = require('./solver.js');
