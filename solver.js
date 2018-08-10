@@ -3,6 +3,7 @@ module.exports = {
     solveNextStep: solveNextStep
 }
 
+// Solve the schema
 function solve(ar) {
     while (!solved(ar)) {
         ar = solveNextStep(ar);
@@ -10,6 +11,7 @@ function solve(ar) {
     return ar;
 }
 
+// Solve only the next step (set positions with only 1 possible number)
 function solveNextStep(ar) {
     ar.forEach((item, index) => {
         if (item == 0) {
@@ -22,30 +24,19 @@ function solveNextStep(ar) {
     return ar;
 }
 
+// Get an array of the 9 numbers on the row number n
 function row(ar, n) {
     return ar.slice(9 * (n - 1), 9 * (n - 1) + 9);
 }
 
-function rows(ar) {
-    var rows = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    return rows.map((item) => {
-        return row(ar, item);
-    });
-}
-
-function cols(ar) {
-    var cols = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    return cols.map((item) => {
-        return col(ar, item);
-    });
-}
-
+// Get an array of the 9 numbers on the column number n
 function col(ar, n) {
     return ar.filter((item, index) => {
         return index % 9 == n - 1;
     });
 }
 
+// Get the 3 full rows in which one of the 9 squares is contained
 function box_rows(ar, n) {
     var start_row = Math.floor((n - 1) / 3) * 3 + 1;
     return [start_row, start_row + 1, start_row + 2].map((item) => {
@@ -53,6 +44,7 @@ function box_rows(ar, n) {
     });
 }
 
+// Return the 9 numbers in one of the 9 squares: first get the full rows and then cut the right columns
 function box(ar, n) {
     var start_col = ((n - 1) * 3) % 9;
     var box = box_rows(ar, n).map((this_row) => {
@@ -67,21 +59,15 @@ function box(ar, n) {
     return final;
 }
 
+// Returns which numbers from 1 to 9 are missing
 function available(ar) {
-    // ar = [0, 2, 0, 4, 5, 6, 0, 8, 9] => return [1, 3, 7]
     return [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((n) => {
         return ar.indexOf(n) == -1;
     })
 }
-function whichBox(coords) {
-    /*
-    Boxes
-    1, 2, 3
-    4, 5, 6
-    7, 8, 9
-    */
 
-    // 4, 2 => 2
+// Return which one of the 9 squares contains the coordinates passed
+function whichBox(coords) {
     var boxes = [
         1, 2, 3,
         4, 5, 6,
@@ -94,6 +80,7 @@ function whichBox(coords) {
     return boxes[box_index];
 }
 
+// Util function to count repetitions in array
 function timesInArray(ar, n) {
     var tot = 0;
     ar.forEach((item) => {
@@ -104,6 +91,7 @@ function timesInArray(ar, n) {
     return tot;
 }
 
+// Return missing numbers for a specific index of the array (first converts to coordinates)
 function availableInIndex(ar, index) {
     var i_coords = coords(index);
     var availableInRow = available(row(ar, i_coords.y));
@@ -122,6 +110,7 @@ function availableInIndex(ar, index) {
     return all_available;
 }
 
+// Convert an index of the array into coordinates
 function coords(index) {
     return {
         x: index % 9 + 1,
@@ -129,10 +118,12 @@ function coords(index) {
     }
 }
 
+// Convert coordinates into index
 function index(coords, size = 9) {
     return ((coords.y - 1) * size) + coords.x - 1;
 }
 
+// Check if the schema is solved
 function solved(ar) {
     return ar.indexOf(0) == -1;
 }
