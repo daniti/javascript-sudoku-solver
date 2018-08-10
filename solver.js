@@ -1,10 +1,25 @@
 module.exports = {
-    solve: function (ar) {
-        while (!solved(ar)) {
-            ar = solveSurePositions(ar);
-        }
-        return ar;
+    solve: solve,
+    solveNextStep: solveNextStep
+}
+
+function solve(ar) {
+    while (!solved(ar)) {
+        ar = solveNextStep(ar);
     }
+    return ar;
+}
+
+function solveNextStep(ar) {
+    ar.forEach((item, index) => {
+        if (item == 0) {
+            var avail = availableInIndex(ar, index)
+            if (avail.length == 1) {
+                ar[index] = avail[0];
+            }
+        }
+    });
+    return ar;
 }
 
 function row(ar, n) {
@@ -120,16 +135,4 @@ function index(coords, size = 9) {
 
 function solved(ar) {
     return ar.indexOf(0) == -1;
-}
-
-function solveSurePositions(ar) {
-    ar.forEach((item, index) => {
-        if (item == 0) {
-            var avail = availableInIndex(ar, index)
-            if (avail.length == 1) {
-                ar[index] = avail[0];
-            }
-        }
-    });
-    return ar;
 }

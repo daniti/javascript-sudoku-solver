@@ -3,4 +3,4 @@ var solver = require('./solver.js');
 
 var s = solver.solve(schema.schema);
 
-console.log(rows);
+console.log(s);
